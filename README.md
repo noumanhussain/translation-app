@@ -34,8 +34,8 @@ A robust API-driven translation management system built with Laravel, designed t
 1. Clone the repository:
 
 ```bash
-git clone <repository-url>
-cd Translation-App
+git clone https://github.com/noumanhussain/translation-app.git
+cd translation-app
 ```
 
 2. Install dependencies:
@@ -82,8 +82,8 @@ php artisan db:seed
 1. Clone the repository:
 
 ```bash
-git clone <repository-url>
-cd Translation-App
+git clone https://github.com/noumanhussain/translation-app.git
+cd translation-app
 ```
 
 2. Copy the environment file:
