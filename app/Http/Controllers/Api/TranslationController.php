@@ -1,8 +1,12 @@
 <?php
 
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Translation\GetByKeyRequest;
+use App\Http\Requests\Translation\StoreTranslationRequest;
+use App\Http\Requests\Translation\UpdateTranslationRequest;
 use App\Models\Translation;
 use App\Models\Language;
 use Illuminate\Http\JsonResponse;
@@ -54,27 +58,21 @@ class TranslationController extends Controller
         ]);
     }
 
-    public function store(Request $request): JsonResponse
+    /**
+     * Store a newly created translation.
+     */
+    public function store(StoreTranslationRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'key' => 'required|string',
-            'value' => 'required|string',
-            'language_id' => 'required|exists:languages,id',
-            'group' => 'string|max:255',
-            'tags' => 'array',
-            'tags.*' => 'exists:tags,id'
-        ]);
-
-        $translation = DB::transaction(function () use ($validated) {
+        $translation = DB::transaction(function () use ($request) {
             $translation = Translation::create([
-                'key' => $validated['key'],
-                'value' => $validated['value'],
-                'language_id' => $validated['language_id'],
-                'group' => $validated['group'] ?? 'general'
+                'key' => $request->key,
+                'value' => $request->value,
+                'language_id' => $request->language_id,
+                'group' => $request->group ?? 'general'
             ]);
 
-            if (isset($validated['tags'])) {
-                $translation->tags()->attach($validated['tags']);
+            if ($request->has('tags')) {
+                $translation->tags()->attach($request->tags);
             }
 
             return $translation->load(['language:id,code,name', 'tags:id,name']);
@@ -83,6 +81,9 @@ class TranslationController extends Controller
         return response()->json($translation, 201);
     }
 
+    /**
+     * Display the specified translation.
+     */
     public function show(Translation $translation): JsonResponse
     {
         return response()->json(
@@ -90,27 +91,21 @@ class TranslationController extends Controller
         );
     }
 
-    public function update(Request $request, Translation $translation): JsonResponse
+    /**
+     * Update the specified translation.
+     */
+    public function update(UpdateTranslationRequest $request, Translation $translation): JsonResponse
     {
-        $validated = $request->validate([
-            'key' => 'string',
-            'value' => 'string',
-            'language_id' => 'exists:languages,id',
-            'group' => 'string|max:255',
-            'tags' => 'array',
-            'tags.*' => 'exists:tags,id'
-        ]);
-
-        DB::transaction(function () use ($translation, $validated) {
+        DB::transaction(function () use ($translation, $request) {
             $translation->update([
-                'key' => $validated['key'] ?? $translation->key,
-                'value' => $validated['value'] ?? $translation->value,
-                'language_id' => $validated['language_id'] ?? $translation->language_id,
-                'group' => $validated['group'] ?? $translation->group
+                'key' => $request->key ?? $translation->key,
+                'value' => $request->value ?? $translation->value,
+                'language_id' => $request->language_id ?? $translation->language_id,
+                'group' => $request->group ?? $translation->group
             ]);
 
-            if (isset($validated['tags'])) {
-                $translation->tags()->sync($validated['tags']);
+            if ($request->has('tags')) {
+                $translation->tags()->sync($request->tags);
             }
         });
 
@@ -119,9 +114,24 @@ class TranslationController extends Controller
         );
     }
 
+    /**
+     * Remove the specified translation.
+     */
     public function destroy(Translation $translation): JsonResponse
     {
         $translation->delete();
         return response()->json(null, 204);
+    }
+
+    /**
+     * Get translations by key across all languages.
+     */
+    public function getByKey(GetByKeyRequest $request): JsonResponse
+    {
+        $translations = Translation::where('key', $request->key)
+            ->with(['language:id,code,name', 'tags:id,name'])
+            ->get(['id', 'key', 'value', 'language_id', 'group']);
+
+        return response()->json($translations);
     }
 }

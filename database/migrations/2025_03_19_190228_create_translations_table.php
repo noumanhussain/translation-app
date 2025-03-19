@@ -13,17 +13,14 @@ return new class extends Migration
     {
         Schema::create('translations', function (Blueprint $table) {
             $table->id();
-            $table->string('key');
+            $table->string('key')->index();
             $table->text('value');
             $table->foreignId('language_id')->constrained()->onDelete('cascade');
-            $table->string('group')->default('general');
+            $table->string('group')->default('general')->index();
             $table->timestamps();
 
-            // Create indexes for common query patterns
-            $table->index('key');
-            $table->index('group');
-            $table->index(['key', 'language_id']);
-            $table->index(['language_id', 'group']);
+            // Add a compound index for better query performance
+            $table->index(['key', 'language_id', 'group']);
         });
     }
 
