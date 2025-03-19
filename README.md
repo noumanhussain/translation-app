@@ -11,15 +11,25 @@ A robust API-driven translation management system built with Laravel, designed t
 -   🔍 Efficient Search and Filtering
 -   📊 Pagination Support
 -   🚀 Scalable Design (100,000+ translations)
+-   🐳 Docker Support
 
 ## Requirements
+
+### Standard Setup
 
 -   PHP 8.1 or higher
 -   Composer
 -   MySQL 5.7 or higher
 -   Laravel 10.x
 
+### Docker Setup
+
+-   Docker
+-   Docker Compose
+
 ## Installation
+
+### Option 1: Standard Setup
 
 1. Clone the repository:
 
@@ -65,6 +75,84 @@ php artisan jwt:secret
 ```bash
 php artisan migrate
 php artisan db:seed
+```
+
+### Option 2: Docker Setup
+
+1. Clone the repository:
+
+```bash
+git clone <repository-url>
+cd Translation-App
+```
+
+2. Copy the environment file:
+
+```bash
+cp .env.example .env
+```
+
+3. Update the `.env` file with Docker-specific settings:
+
+```
+DB_CONNECTION=mysql
+DB_HOST=db
+DB_PORT=3306
+DB_DATABASE=translation_db
+DB_USERNAME=translation_user
+DB_PASSWORD=translation_password
+
+JWT_SECRET=your_jwt_secret
+```
+
+4. Build and start the Docker containers:
+
+```bash
+docker-compose up -d --build
+```
+
+5. Install dependencies:
+
+```bash
+docker-compose exec app composer install
+```
+
+6. Generate application key and JWT secret:
+
+```bash
+docker-compose exec app php artisan key:generate
+docker-compose exec app php artisan jwt:secret
+```
+
+7. Run migrations and seed the database:
+
+```bash
+docker-compose exec app php artisan migrate
+docker-compose exec app php artisan db:seed
+```
+
+The application will be available at `http://localhost:8000`
+
+### Docker Commands
+
+```bash
+# Start the application
+docker-compose up -d
+
+# Stop the application
+docker-compose down
+
+# View logs
+docker-compose logs -f
+
+# Access the PHP container
+docker-compose exec app bash
+
+# Run artisan commands
+docker-compose exec app php artisan [command]
+
+# Run composer commands
+docker-compose exec app composer [command]
 ```
 
 ## API Documentation
