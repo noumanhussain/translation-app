@@ -201,20 +201,20 @@ Authorization: Bearer <your_jwt_token>
 
 #### Languages
 
--   `GET /api/v1/languages` - List all languages
--   `POST /api/v1/languages` - Create a new language
--   `GET /api/v1/languages/{id}` - Get language details
--   `PUT /api/v1/languages/{id}` - Update language
--   `DELETE /api/v1/languages/{id}` - Delete language
+-   `GET /api/languages` - List all languages
+-   `POST /api/languages` - Create a new language
+-   `GET /api/languages/{id}` - Get language details
+-   `PUT /api/languages/{id}` - Update language
+-   `DELETE /api/languages/{id}` - Delete language
 
 #### Translations
 
--   `GET /api/v1/translations` - List translations (paginated)
--   `POST /api/v1/translations` - Create translation
--   `GET /api/v1/translations/{id}` - Get translation details
--   `PUT /api/v1/translations/{id}` - Update translation
--   `DELETE /api/v1/translations/{id}` - Delete translation
--   `GET /api/v1/translations/by-key` - Search translations by key
+-   `GET /api/translations` - List translations (paginated)
+-   `POST /api/translations` - Create translation
+-   `GET /api/translations/{id}` - Get translation details
+-   `PUT /api/translations/{id}` - Update translation
+-   `DELETE /api/translations/{id}` - Delete translation
+-   `GET /api/translations/by-key` - Search translations by key
 
 Query Parameters for Translations:
 
@@ -224,6 +224,64 @@ Query Parameters for Translations:
 -   `group` (filter by group)
 -   `tag` (filter by tag name)
 -   `key` (search in translation keys)
+
+### Swagger Documentation
+
+The API documentation is available through Swagger UI, which provides an interactive interface to explore and test the API endpoints.
+
+#### Accessing the Documentation
+
+1. Start the Laravel development server:
+
+```bash
+php artisan serve
+```
+
+2. Visit the Swagger documentation at:
+
+```
+http://127.0.0.1:8000/api/documentation
+```
+
+#### Features
+
+-   🔐 Interactive Authentication
+-   📝 Detailed Request/Response Examples
+-   🧪 Try-Out Functionality
+-   📚 Comprehensive Endpoint Documentation
+-   🏷️ Organized by Tags
+-   🔍 Search and Filter Operations
+
+#### Authentication in Swagger UI
+
+1. Click the "Authorize" button at the top of the page
+2. Enter your JWT token in the format: `Bearer your_token_here`
+3. Click "Authorize" to save
+4. All subsequent API requests will include the authorization header
+
+#### Available Documentation Sections
+
+1. **Authentication**
+
+    - Login
+    - Logout
+    - Token Refresh
+
+2. **Languages**
+
+    - List all languages
+    - Create new language
+    - Get language details
+    - Update language
+    - Delete language
+
+3. **Translations**
+    - List translations
+    - Create translation
+    - Get translation details
+    - Update translation
+    - Delete translation
+    - Search by key
 
 ## Architecture and Design Choices
 
