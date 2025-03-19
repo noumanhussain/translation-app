@@ -20,9 +20,6 @@ class Language extends Model
         'is_active' => 'boolean'
     ];
 
-    /**
-     * Get all translations for this language
-     */
     public function translations(): HasMany
     {
         return $this->hasMany(Translation::class);

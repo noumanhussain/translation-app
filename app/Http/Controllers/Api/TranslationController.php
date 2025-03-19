@@ -19,31 +19,26 @@ class TranslationController extends Controller
         $perPage = min($request->input('per_page', 50), 100); // Limit max items per page
         $query = Translation::query()->with(['language:id,code,name', 'tags:id,name']);
 
-        // Filter by language
         if ($request->has('language')) {
             $query->whereHas('language', function ($q) use ($request) {
                 $q->where('code', $request->language);
             });
         }
 
-        // Filter by group
         if ($request->has('group')) {
             $query->where('group', $request->group);
         }
 
-        // Filter by tag
         if ($request->has('tag')) {
             $query->whereHas('tags', function ($q) use ($request) {
                 $q->where('name', $request->tag);
             });
         }
 
-        // Filter by key
         if ($request->has('key')) {
             $query->where('key', 'LIKE', '%' . $request->key . '%');
         }
 
-        // Select only necessary fields
         $query->select(['id', 'key', 'value', 'language_id', 'group']);
 
         $translations = $query->paginate($perPage);
@@ -59,9 +54,6 @@ class TranslationController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created translation.
-     */
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
@@ -91,9 +83,6 @@ class TranslationController extends Controller
         return response()->json($translation, 201);
     }
 
-    /**
-     * Display the specified translation.
-     */
     public function show(Translation $translation): JsonResponse
     {
         return response()->json(
@@ -101,9 +90,6 @@ class TranslationController extends Controller
         );
     }
 
-    /**
-     * Update the specified translation.
-     */
     public function update(Request $request, Translation $translation): JsonResponse
     {
         $validated = $request->validate([
@@ -133,9 +119,6 @@ class TranslationController extends Controller
         );
     }
 
-    /**
-     * Remove the specified translation.
-     */
     public function destroy(Translation $translation): JsonResponse
     {
         $translation->delete();

@@ -14,10 +14,6 @@ class Tag extends Model
         'name',
         'description'
     ];
-
-    /**
-     * Get all translations for this tag
-     */
     public function translations(): BelongsToMany
     {
         return $this->belongsToMany(Translation::class);

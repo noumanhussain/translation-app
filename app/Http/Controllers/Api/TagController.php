@@ -19,9 +19,6 @@ class TagController extends Controller
         return response()->json($tags);
     }
 
-    /**
-     * Store a newly created tag.
-     */
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
@@ -33,17 +30,11 @@ class TagController extends Controller
         return response()->json($tag, 201);
     }
 
-    /**
-     * Display the specified tag.
-     */
     public function show(Tag $tag): JsonResponse
     {
         return response()->json($tag->load('translations'));
     }
 
-    /**
-     * Update the specified tag.
-     */
     public function update(Request $request, Tag $tag): JsonResponse
     {
         $validated = $request->validate([
@@ -55,9 +46,6 @@ class TagController extends Controller
         return response()->json($tag);
     }
 
-    /**
-     * Remove the specified tag.
-     */
     public function destroy(Tag $tag): JsonResponse
     {
         $tag->delete();

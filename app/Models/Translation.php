@@ -18,17 +18,11 @@ class Translation extends Model
         'group'
     ];
 
-    /**
-     * Get the language that owns the translation
-     */
     public function language(): BelongsTo
     {
         return $this->belongsTo(Language::class);
     }
 
-    /**
-     * Get the tags for this translation
-     */
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class);
